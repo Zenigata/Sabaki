@@ -2,34 +2,154 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased][unreleased]
-
-**Added**
-
-* Add ability to remove all variations apart from the active one
+## [Sabaki v0.31.3][v0.31.3] (2017-09-19)
 
 **Changed**
 
-* Update to Electron v1.4.10
-
-## [Sabaki v0.19.1][v0.19.1] (2016-11-20)
-
-**Added**
-
-* Add ability to flatten nodes
-
-**Changed**
-
-* Update to Electron v1.4.7
+* Change 'Remove Node' shortcut to <kbd>Command+Backspace</kbd> on macOS
+* Change 'Fullscreen' shortcut to <kbd>F11</kbd> on Linux and Windows
+* Lift the arbitrary maximum limit of autoplay's 'sec per move' (Thanks to [@emauton](https://github.com/emauton))
+* Per-window sidebars (see [#265](https://github.com/yishn/Sabaki/issues/265))
+* Update to Electron v1.8.0 beta
 
 **Fixed**
 
-* Fix game graph not updated when pasting variations sometimes
+* Fix updated komi values not being sent to GTP engines during the game
+* Fix pass moves not being sent to GTP engines
 
-## [Sabaki v0.19.0][v0.19.0] (2016-11-11)
+## [Sabaki v0.31.2][v0.31.2] (2017-07-15)
+
+**Changed**
+
+* Update to Electron v1.7.4 beta
+
+**Fixed**
+
+* Fix Sabaki crashing when pressing enter in autoplay mode
+* Fix 'Clear Annotations' not working
+* Fix Sabaki not sending pass command to attached engines
+* Fix cursor jumping to the end of comment text when editing
+
+## [Sabaki v0.31.1][v0.31.1] (2017-06-24)
 
 **Added**
 
+* Add support for outdated `L` property
+* Add menu items for going to next/previous game
+
+**Fixed**
+
+* Fix 'Jump to end after loading file' not working
+* Fix theme uninstallation failing on Windows with disabled recycle bin
+
+## [Sabaki v0.31.0][v0.31.0] (2017-05-27)
+
+**Added**
+
+* Themes (Thanks to [@Seth-Rothschild](https://github.com/Seth-Rothschild))
+* Ability to adjust UI zoom
+
+**Changed**
+
+* Update to Electron v1.7.2 beta
+* Rename 'Pause' engines command to 'Suspend'
+
+**Fixed**
+
+* Fix player names not displaying in the game chooser drawer
+* Fix Sabaki displaying 'Please wait...' forever after a two engines match ends in resignation
+* Fix GTP console sending invalid commands
+* Fix 'Go To Move Number' not working
+* Fix move/position annotations being incorrectly applied
+
+## [Sabaki v0.30.3][v0.30.3] (2017-05-10)
+
+**Added**
+
+* Ability to pause engines
+
+**Fixed**
+
+* Fix Sabaki not being able to undo a flatten node operation
+* Fix Sabaki incorrectly setting `HA` and `AB` properties when there are no handicap stones
+* Fix Sabaki sometimes not saving comments when comment box is focused
+* Fix Sabaki crashing when checking for updates without internet connection
+
+## [Sabaki v0.30.2][v0.30.2] (2017-05-03)
+
+**Changed**
+
+* Update to Electron v1.6.8 beta
+* Reduce mouse wheel navigation sensitivity
+
+**Fixed**
+
+* Fix Sabaki being unresponsive for a short time during update checking
+* Fix setting white player rank not working in info drawer
+
+## [Sabaki v0.30.1][v0.30.1] (2017-04-25)
+
+**Added**
+
+* The game graph has been rewritten from scratch and is now more efficient with large game trees without the need to collapse subtrees. The graph is more accessible, the nodes have a bigger click surface and dragging the graph can go beyond the component.
+* The game collection manager includes support for `ngf` and `gib` files. It also sports a slick board animation, which is very slick. Did I mention it's slick?
+* You can assign custom label texts to a vertex on the board by selecting the label or number tool and clicking 'Edit Label' in the context menu.
+* You can attach two engines to Sabaki and let them play each other while you can sip tea comfortably and watch them fight. The GTP console has been redesigned so you are able to address both engines separately. It also displays (usually) useful `stderr` information from the engines. Command autocompletion is more obvious now.
+* Drawing with the line/arrow tool makes it clear that drawing over an existing line/arrow removes that line/arrow.
+* Ability to hide menu bar on Windows and Linux.
+
+**Changed**
+
+* Update to Electron v1.6.7 beta
+
+**Fixed**
+
+* When encoding is not specified, Sabaki tries to infer the encoding from content instead of assuming ISO-8859-1 (Thanks to [@fohristiwhirl](https://github.com/fohristiwhirl)).
+* When `CA` property is missing from an opened file, Sabaki previously saves it without correct UTF-8 `CA` property. This results in Sabaki opening these files in ISO-8859-1, not correctly displaying text. This is fixed now.
+* When attaching engines, Sabaki previously sends the `boardsize` command after `clear_board` which technically can result in arbitrary board positions on the engine. This is fixed now.
+* Other Go software may specify the same property multiple times on a tree node, which technically makes the SGF invalid. Sabaki can handle these files now.
+
+## [Sabaki v0.21.0][v0.21.0] (2017-03-30)
+
+**Added**
+
+* Support for Tygem `gib` files and WBaduk `ngf` files (Thanks to [@fohristiwhirl](https://github.com/fohristiwhirl))
+* Move spots on the board are getting colored according to its move annotation (Thanks to [@dfannius](https://github.com/dfannius))
+* Move annotation context menu on the last played stone (Thanks to [@dfannius](https://github.com/dfannius))
+* Sabaki Web can load and copy SGF files from/to the clipboard (Thanks to [@C0DEHERO](https://github.com/C0DEHERO))
+* Use Monte Carlo algorithm for better dead stones estimation
+* Ability to change the order of variations
+* Ability to remove certain node information from the whole game or current position
+* Ability to sort games in a game container
+* Add compact and big style game tree
+
+**Changed**
+
+* Update to Electron v1.6.2
+* Board grid lines are now vector images
+* Sabaki Web saves settings in local storage
+* Current variation is more distinguishable from other variations in the game tree
+
+**Fixed**
+
+* Windows installers create app folder if necessary
+* Fix Sabaki being unresponsive when adding invalid files to a game collection
+* Fix wrong initial `SZ` property value, thus resulting in an invalid SGF file
+* Fix issue where Sabaki is inserting a ton of unnecessary empty lines in SGF files on Windows
+* Fix GitHub and 'Report Issue' menu items not working
+* Fix move interpretation stuck at '3-3 point' sometimes
+* Fix reload file warning showing if the file has been removed
+* Sabaki uses `\r\n` as linebreaks on Windows
+* Fix 'Download' button when an update is available
+
+## [Sabaki v0.19.3][v0.19.3] (2017-01-11)
+
+**Added**
+
+* Sabaki remembers board setup, i.e. komi, board size, and handicap stones
+* Sabaki offers to reload an opened file if it has been changed externally
+* Ability to remove all variations apart from the active one
+* Ability to flatten nodes
 * Add 'Play' menu
 * Add 'Go To Move Number' menu item
 * Ability to select points by keyboard input
@@ -38,12 +158,17 @@ All notable changes to this project will be documented in this file.
 **Changed**
 
 * Change keyboard shortcuts for toggling sidebar elements
-* Update to Electron v1.4.5
+* Update to Electron v1.4.13
 * Update to Octicons v5.0.1
 * Remove gemini-scrollbar dependency
 
 **Fixed**
 
+* Fix copy to clipboard not working
+* Fix board arrows not pointing in the right direction
+* Fix incorrectly interpreting openings on boards other than 19&times;19
+* Fix Sabaki closing even if user cancels
+* Fix game graph not being updated when pasting variations sometimes
 * Fix handicap stones being placed incorrectly
 * Fix not being able to select executables for engines
 
@@ -51,7 +176,7 @@ All notable changes to this project will be documented in this file.
 
 **Added**
 
-* Add support for non-UTF8 encodings (Thanks to @apetresc)
+* Add support for non-UTF8 encodings (Thanks to [@apetresc](https://github.com/apetresc))
 * Add basic text editing keyboard shortcuts when editing/writing comments on macOS
 
 **Changed**
@@ -464,9 +589,16 @@ All notable changes to this project will be documented in this file.
 
 First release
 
-[unreleased]: https://github.com/yishn/Sabaki/compare/v0.19.1...master
-[v0.19.1]: https://github.com/yishn/Sabaki/compare/v0.19.0...v0.19.1
-[v0.19.0]: https://github.com/yishn/Sabaki/compare/v0.18.3...v0.19.0
+[unreleased]: https://github.com/yishn/Sabaki/compare/v0.31.3...master
+[v0.31.3]: https://github.com/yishn/Sabaki/compare/v0.31.2...v0.31.3
+[v0.31.2]: https://github.com/yishn/Sabaki/compare/v0.31.1...v0.31.2
+[v0.31.1]: https://github.com/yishn/Sabaki/compare/v0.31.0...v0.31.1
+[v0.31.0]: https://github.com/yishn/Sabaki/compare/v0.30.3...v0.31.0
+[v0.30.3]: https://github.com/yishn/Sabaki/compare/v0.30.2...v0.30.3
+[v0.30.2]: https://github.com/yishn/Sabaki/compare/v0.30.1...v0.30.2
+[v0.30.1]: https://github.com/yishn/Sabaki/compare/v0.21.0...v0.30.1
+[v0.21.0]: https://github.com/yishn/Sabaki/compare/v0.19.3...v0.21.0
+[v0.19.3]: https://github.com/yishn/Sabaki/compare/v0.18.3...v0.19.3
 [v0.18.3]: https://github.com/yishn/Sabaki/compare/v0.17.2...v0.18.3
 [v0.17.2]: https://github.com/yishn/Sabaki/compare/v0.15.3...v0.17.2
 [v0.15.3]: https://github.com/yishn/Sabaki/compare/v0.14.0...v0.15.3

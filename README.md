@@ -10,21 +10,23 @@ An elegant Go/Baduk/Weiqi board and SGF editor for a more civilized age. [Downlo
 
 - Fuzzy stone placement
 - Read and save SGF games and collections
-- Display formatted SGF comments using a [subset of Markdown](https://github.com/yishn/Sabaki/wiki/Markdown-in-Sabaki)
-- Personalize board appearance with [userstyles](https://github.com/yishn/Sabaki/wiki/Userstyles)
+- Open wBaduk NGF and Tygem GIB files
+- Display formatted SGF comments using a [subset of Markdown](https://github.com/yishn/Sabaki/blob/master/docs/guides/markdown.md)
+- Personalize board appearance with [themes](https://github.com/yishn/Sabaki/blob/master/docs/guides/theme-directory.md)
 - SGF editing tools
-- Lines & arrows markup
+- Lines & arrows board markup
 - Copy & paste variations
-- Game graph
-- Score estimator
-- Scoring tool
-- Find move
+- Fast game tree
+- Score estimator & scoring tool
+- Find move by move position and comment text
 - Position & move annotations
-- [GTP engines](https://github.com/yishn/Sabaki/wiki/Engines) support
+- [GTP engines](https://github.com/yishn/Sabaki/blob/master/docs/guides/engines.md) support
 - Guess mode
 - Autoplay games
 
-For more information visit the [wiki](https://github.com/yishn/Sabaki/wiki). You can support this project by [donating some money](https://paypal.me/yishn/4).
+## Documentation
+
+For more information visit the [documentation](https://github.com/yishn/Sabaki/blob/master/docs/README.md). You're welcome to [contribute](https://github.com/yishn/Sabaki/blob/master/CONTRIBUTING.md) to this project.
 
 ## Web Version
 
@@ -34,27 +36,8 @@ If you're looking for the code of the [website](http://sabaki.yichuanshen.de/), 
 
 ## Building & Tests
 
-See [Building & Tests](https://github.com/yishn/Sabaki/wiki/Building-&-Tests) in the wiki.
+See [Building & Tests](https://github.com/yishn/Sabaki/blob/master/docs/guides/building-tests.md) in the documentation.
 
 ## License
 
 This project is licensed under the [MIT license](https://github.com/yishn/Sabaki/blob/master/LICENSE.md).
-
-## Third Party Libraries
-
-* [Electron](http://electron.atom.io/)
-  ([MIT License](https://github.com/atom/electron/blob/master/LICENSE))
-* [Sprint](https://github.com/philpl/sprint/)
-  ([MIT License](https://github.com/philpl/sprint/blob/master/LICENSE.txt))
-* [sigma](http://sigmajs.org/)
-  ([MIT License](https://github.com/jacomyal/sigma.js/blob/master/LICENSE.txt))
-* [marked](https://github.com/chjj/marked)
-  ([MIT License](https://github.com/chjj/marked/blob/master/LICENSE))
-* [Pikaday](https://github.com/dbushell/Pikaday)
-  ([MIT License](https://github.com/dbushell/Pikaday/blob/master/LICENSE))
-* [iconv-lite](https://github.com/ashtuchkin/iconv-lite)
-  ([MIT License](https://github.com/ashtuchkin/iconv-lite/blob/master/LICENSE))
-* [argv-split](https://github.com/kaelzhang/node-argv-split)
-  ([MIT License](https://github.com/kaelzhang/node-argv-split/blob/master/LICENSE-MIT))
-* [Octicons](https://octicons.github.com/)
-  ([License](https://github.com/github/octicons/blob/master/LICENSE.txt))

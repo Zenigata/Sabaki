@@ -1,8 +1,12 @@
-build.js
+bundle.js
+bundle.js.map
 
-bin/
+browser_old/
+dist/
 gnugo/
 node_modules/
+
+package-lock.json
 
 # Windows image file caches
 Thumbs.db
@@ -48,3 +52,5 @@ Network Trash Folder
 Temporary Items
 .apdisk
 packager.bat
+
+*.pdn

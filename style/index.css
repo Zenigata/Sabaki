@@ -1,4 +1,7 @@
-main {
+#main {
+        z-index: 10;
+    }
+    main {
         position: absolute;
         left: 0;
         top: 0;
@@ -43,6 +46,9 @@ header, #bar .bar {
         padding-left: 30px;
         text-align: left;
     }
+    header > span > .engine {
+        font-family: Consolas, Menlo, Monaco, 'Ubuntu Mono', monospace;
+    }
     header > span > .captures {
         position: relative;
         top: -1px;
@@ -59,7 +65,7 @@ header, #bar .bar {
         font-size: .8em;
         transition: opacity .2s;
     }
-    header .bookmark {
+    header .hotspot {
         position: absolute;
         left: 10px;
         top: -42px;
@@ -68,7 +74,7 @@ header, #bar .bar {
         background: #a456bb;
         transition: top .2s;
     }
-    header .bookmark::before, header .bookmark::after {
+    header .hotspot::before, header .hotspot::after {
         content: '';
         display: block;
         position: absolute;
@@ -77,12 +83,12 @@ header, #bar .bar {
         border-top: 6px solid #a456bb;
         border-right: 6px solid transparent;
     }
-    header .bookmark::after {
+    header .hotspot::after {
         left: 6px;
         border-right: none;
         border-left: 6px solid transparent;
     }
-    .bookmark header .bookmark { top: 0; }
+    header.hotspot .hotspot { top: 0; }
     header > img, #headermenu, header .undo {
         display: block;
         position: absolute;
@@ -106,7 +112,7 @@ header, #bar .bar {
     header .undo {
         right: auto;
         left: 0;
-        top: 53px;
+        top: 61px;
         transition: top .2s, left .2s;
     }
     header .undo img, #headermenu img {
@@ -115,10 +121,9 @@ header, #bar .bar {
         left: 50%;
         transform: translate(-50%, -50%);
         filter: invert(100%);
-        -webkit-filter: invert(100%);
     }
-    .undoable header .undo { top: 50%; }
-    .bookmark header .undo { left: 32px; }
+    header.undoable .undo { top: 50%; }
+    header.hotspot .undo { left: 32px; }
     #headermenu:hover, header .undo:hover {
         background: #222;
 }
@@ -137,6 +142,8 @@ header, #bar .bar {
         transition: background .2s;
     }
     #bar .bar { top: -40px; }
+    #bar .bar.current { top: 0; }
+    #bar header:not(.current) { top: 40px; }
     #bar .bar .close {
         display: block;
         position: absolute;
@@ -151,16 +158,11 @@ header, #bar .bar {
     #scoring .close, #estimator .close, #find .close,
     #guess .close, #autoplay .close {
         filter: invert(100%);
-        -webkit-filter: invert(100%);
     }
     .edit #bar { background: #C4BD64; }
     .scoring #bar, .estimator #bar { background: #C42311; }
     .find #bar { background: #0050C0; }
     .guess #bar { background: #823499; }
-    .edit #edit, .scoring #scoring, .estimator #estimator,
-    .find #find, .guess #guess, .autoplay #autoplay { top: 0; }
-    .edit header, .scoring header, .estimator header,
-    .find header, .guess header, .autoplay header { top: 40px; }
     #bar .bar input {
         box-sizing: border-box;
         height: 32px;
@@ -171,11 +173,26 @@ header, #bar .bar {
         height: 32px;
         left: 10px;
         top: 50%;
-        background: #400000;
+        background: #600000;
         transform: translateY(-50%);
     }
-    #scoring button:hover, #scoring button:focus,
-    #estimator button:hover, #estimator button:focus { background: #600000; }
+    #scoring button strong, #estimator button strong {
+        display: block;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background: #400000;
+        line-height: 32px;
+        text-align: center;
+        opacity: 1;
+        transition: opacity .2s;
+    }
+    #scoring button:hover strong, #scoring button:focus strong,
+    #estimator button:hover strong, #estimator button:focus strong {
+        opacity: 0;
+    }
     #bar .bar button:active {
         transform: translateY(-46%);
 }
@@ -190,7 +207,6 @@ header, #bar .bar {
     #find button:hover { background: #001080; }
     #find button img {
         filter: invert(100%);
-        -webkit-filter: invert(100%);
     }
     #find button:nth-child(2) { left: 212px; }
     #find input {
@@ -225,8 +241,11 @@ header, #bar .bar {
     .edit #edit ul li a:hover {
         background: #B3AC53;
     }
-    .edit #edit ul li.selected a, .edit #edit ul li a:active {
-        background: #A29B42;
+    .edit #edit ul li a:active {
+        background: #8E851B;
+    }
+    .edit #edit ul li.selected a {
+        background: #9F962C;
     }
     #edit ul li a img {
         position: absolute;
@@ -263,18 +282,13 @@ header, #bar .bar {
         width: 35px;
         background: url('../node_modules/octicons/build/svg/triangle-right.svg') center / 20px 20px no-repeat;
         transform: translateX(-50%);
-        -webkit-filter: invert(100%);
         filter: invert(100%);
-        transition: background-image .2s;
+        transition: background-image .2s, box-shadow .5s;
     }
     #autoplay.playing .play {
         background-color: rgba(255, 255, 255, .3);
         background-image: url('../node_modules/octicons/build/svg/primitive-square.svg');
-        animation: playing-glowing 2.3s infinite;
-    }
-    @keyframes playing-glowing {
-        0% { box-shadow: none; }
-        50% { box-shadow: 0 0 40px rgba(0, 0, 0, .5); }
+        box-shadow: 0 0 40px rgba(0, 0, 0, .5);
     }
     #autoplay .play:hover {
         background-color: rgba(255, 255, 255, .2);
@@ -320,62 +334,74 @@ header, #bar .bar {
         left: 0;
         right: 0;
         bottom: 0;
-        overflow: auto;
     }
-    #console, #console pre, #console input {
+    #console, #console pre, #console input,
+    #console select, #console option {
+        background: inherit;
         color: #d0d0d0;
         font: 14px/1.3 Consolas, Menlo, Monaco, 'Ubuntu Mono', monospace;
     }
-    #console pre {
-        margin: 15px;
+    #console select {
+        padding-right: 0;
     }
-    #console .internal { opacity: .5; }
-    #console .success { color: #FFCC66; }
-    #console .error { color: #F25C3D; }
-    #console .id { color: #CC99CC; }
-    #console .inner form {
-        position: relative;
-        height: 1.3em;
-        margin: .7em 0;
-        background: #222;
-    }
-    #console .inner form label::before {
-        content: '';
-        display: block;
+    #console .log {
         position: absolute;
         top: 0;
         left: 0;
-        height: 1.3em;
-        width: 20px;
-        background: #393939;
-        transition: background-color .5s;
+        right: 0;
+        bottom: 40px;
+        padding: 15px;
+        overflow: auto;
+        list-style: none;
+        user-select: text;
+        cursor: auto;
     }
-    #console .inner form label::after {
-        content: '';
-        display: block;
+    #console .log .internal { color: #888; }
+    #console .log .success { color: #FFCC66; }
+    #console .log .error { color: #F25C3D; }
+    #console .log .id { color: #CC99CC; }
+    #console .log li {
+        margin: 5px 0;
+    }
+    #console .log li.response {
+        margin-left: 15px;
+    }
+    #console .input {
         position: absolute;
-        border-left: 10px #393939 solid;
-        border-top: .65em transparent solid;
-        border-bottom: .65em transparent solid;
-        top: 0;
-        left: 20px;
-        height: 0;
-        width: 0;
-        transition: border-left-color .5s;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background: #222;
     }
-    #console .inner form.waiting label::before { background: #FBF593; }
-    #console .inner form.waiting label::after { border-left-color: #FBF593; }
-    #console .inner form:last-child label::before { background: #F25C3D; }
-    #console .inner form:last-child label::after { border-left-color: #F25C3D; }
-    #console .inner form input {
+    #console .input select {
         box-sizing: border-box;
         position: absolute;
-        border: none;
+        left: 0;
+        width: 100px;
         top: 0;
-        width: 100%;
         bottom: 0;
-        padding: 0 10px 0 40px;
+    }
+    #console .input select, #console .input option {
+        text-align: right;
+    }
+    #console .input input {
+        box-sizing: border-box;
+        position: absolute;
+        left: 100px;
+        width: calc(100% - 100px);
+        top: 0;
+        bottom: 0;
         background: transparent;
+        z-index: 3;
+    }
+    #console .input .autocomplete {
+        display: none;
+        opacity: .4;
+        z-index: 2;
+    }
+    #console .input .command:focus + .autocomplete {
+        display: block;
 }
 
 .coord {
@@ -383,6 +409,7 @@ header, #bar .bar {
         background: #101010;
         color: white;
         border-radius: 3px;
+        cursor: default;
     }
     .coord:hover {
         background: #0082F0;
@@ -413,25 +440,17 @@ header, #bar .bar {
         right: 200px;
 }
 
-#graph {
+#slider {
         position: absolute;
         top: 0;
-        right: 25px;
-        left: 0;
-        height: 100%;
-        z-index: 1;
-    }
-    #graph .slider {
-        position: absolute;
-        top: 0;
-        right: -25px;
+        right: 0;
         bottom: 0;
         width: 25px;
         background: #111;
         box-shadow: 0 0 10px #111;
-        z-index: 10;
+        z-index: 2;
     }
-    #graph .slider a {
+    #slider a {
         position: absolute;
         top: 0;
         left: 0;
@@ -444,19 +463,19 @@ header, #bar .bar {
         text-decoration: none;
         transition: color .2s;
     }
-    #graph .slider a:active { color: #eee; }
-    #graph .slider a.next {
+    #slider a:active { color: #eee; }
+    #slider a.next {
         top: auto;
         bottom: 0;
     }
-    #graph .slider .inner {
+    #slider .inner {
         position: absolute;
         top: 35px;
         left: 0;
         right: 0;
         bottom: 35px;
     }
-    #graph .slider .inner span {
+    #slider .inner span {
         position: absolute;
         top: 0%;
         left: 0;
@@ -470,11 +489,31 @@ header, #bar .bar {
         text-align: center;
         transition: top .2s, background .2s;
     }
-    #graph .slider .inner.active span {
+    #slider:active .inner span {
         transition: none;
     }
-    #graph .slider .inner.active span, #graph .slider .inner span:hover {
+    #slider .inner:active span, #graph .slider .inner span:hover {
         background: #494949;
+}
+
+#graph {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        left: 0;
+        height: 100%;
+        z-index: 1;
+    }
+    #graph svg:active {
+        cursor: -webkit-grabbing;
+    }
+    #graph svg:not(:active) > * {
+        transition: transform .3s;
+    }
+    #graph svg path.hover {
+        stroke: white;
+        stroke-width: 3px;
+        stroke-linecap: square;
 }
 
 #properties {
@@ -489,6 +528,15 @@ header, #bar .bar {
         box-shadow: 10px 0 10px #111;
         transition: height .2s, color .2s, background .2s;
         z-index: 2;
+    }
+    #properties .horizontalresizer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        cursor: ns-resize;
+        z-index: 10;
     }
     #properties .edit {
         display: none;
@@ -571,15 +619,6 @@ header, #bar .bar {
     }
     .edit #properties .edit input { color: #555; }
     .edit #properties .inner { opacity: 0; }
-    #properties .horizontalresizer {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 5px;
-        cursor: ns-resize;
-        z-index: 10;
-    }
     #properties .inner {
         margin: 15px;
         word-wrap: break-word;
@@ -612,24 +651,11 @@ header, #bar .bar {
         padding: 3px;
         float: right;
         filter: invert(100%);
-        -webkit-filter: invert(100%);
         opacity: .5;
         transition: background .2s;
     }
     #properties .inner .header .edit-button:hover {
         background: white;
-}
-
-#indicator {
-    position: absolute;
-    top: -150%;
-    left: -150%;
-    margin-top: -2px;
-    margin-left: -2px;
-    background: rgba(0, 130, 240, .2);
-    border: 2px solid #0082F0;
-    border-radius: 5px;
-    z-index: 3;
 }
 
 .drawer {
@@ -642,12 +668,15 @@ header, #bar .bar {
         padding: 20px;
         background: rgba(38, 41, 44, .97);
         color: #eee;
-        transition: bottom .5s;
+        transition: transform .5s;
         z-index: 15;
     }
     .drawer.show {
-        bottom: 0;
+        transform: translateY(-285px);
         box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+    }
+    .drawer h2 {
+        font-weight: lighter;
     }
     .drawer input, .drawer select, button {
         background: #111;
@@ -660,6 +689,10 @@ header, #bar .bar {
     button:active {
         position: relative;
         top: 2px;
+    }
+    .drawer input[type="checkbox"]:focus { background: #111; }
+    .drawer input[type="checkbox"]::before {
+        filter: invert(100%);
 }
 
 #info section {
@@ -674,7 +707,6 @@ header, #bar .bar {
         margin: 0 2px 5px;
         padding: 3px;
         filter: invert(100%);
-        -webkit-filter: invert(100%);
         transition: background .2s;
     }
     #info section .menu.active {
@@ -710,8 +742,10 @@ header, #bar .bar {
         bottom: 20px;
         margin: 0;
     }
-    #info ul input[name="komi"], #info ul input[name^="size-"] {
-        width: 45px;
+    #info ul input[name="komi"],
+    #info ul input[name^="size-"] { width: 45px; }
+    @media screen and (max-width: 600px) {
+        #info ul input[name^="size-"] { width: 40px; }
     }
     #info span.size-swap {
         padding: 3px;
@@ -729,6 +763,9 @@ header, #bar .bar {
         background: rgba(251, 245, 147, .9);
         color: #333;
     }
+    #score h2 {
+        font-weight: normal;
+    }
     #score .tabs {
         position: absolute;
         top: 27px;
@@ -744,7 +781,8 @@ header, #bar .bar {
         border-color: transparent;
         background: rgba(0, 0, 0, .2);
     }
-    #score .tabs li:not(.current) a:hover {
+    #score .tabs li:not(.current) a:hover,
+    #score .tabs li:not(.current) a:focus {
         border-color: transparent;
         background: rgba(0, 0, 0, .1);
     }
@@ -790,11 +828,12 @@ header, #bar .bar {
         bottom: -440px;
         height: 400px;
     }
-    #preferences.show { bottom: 0; }
-    #preferences input[type="checkbox"]:focus { background: #111; }
+    #preferences.show { transform: translateY(-440px); }
     #preferences form ul { margin: 0 0 1.5em; }
-    #preferences form ul li { margin: 0 0 7px; }
-    #preferences form > p:last-child {
+    #preferences form ul li,
+    #cleanmarkup form ul li { margin: 0 0 7px; }
+    #preferences form > p:last-child,
+    #cleanmarkup form > p:last-child {
         position: absolute;
         right: 20px;
         bottom: 14px;
@@ -802,31 +841,132 @@ header, #bar .bar {
     #preferences form > div {
         display: none;
     }
-    #preferences form > div.general {
-        height: 315px;
+    #preferences form > div > h3 {
+        position: relative;
+        margin-bottom: 1.5em;
+        font-size: .8em;
+        font-weight: normal;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        opacity: .8;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+    #preferences form > div > h3::after {
+        content: '';
+        display: inline-block;
+        position: relative;
+        top: -.35em;
+        margin-left: 5px;
+        width: 100%;
+        height: 1px;
+        background: white;
+        opacity: .5;
+    }
+    #preferences form > div label select {
+        margin-left: 10px;
+    }
+    #preferences form > div.general,
+    #preferences form > div.themes {
         padding-top: 1.5em;
-        column-count: 2;
-        -webkit-column-count: 2;
-        -moz-column-count: 2;
+    }
+    #preferences form > div.general ul {
+        width: 50%;
+        float: left;
+    }
+    #preferences form > div.general ul:not(:nth-child(even)) {
+        width: calc(50% - 20px);
+        margin-right: 20px;
+    }
+    #preferences form > div.general ul li label {
+        display: block;
+        height: 1.5em;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    #preferences form > div.themes label span {
+        display: inline-block;
+        width: 10em;
+        text-align: right;
+    }
+    #preferences form > div.themes input {
+        width: 40%;
+        margin-left: 10px;
+    }
+    #preferences form > div.themes .browse,
+    #preferences form > div.themes .invalid {
+        display: inline-block;
+        position: relative;
+        top: 2px;
+        margin-left: 10px;
+        opacity: .5;
+        filter: invert(100%);
+        transition: opacity .2s;
+    }
+    #preferences form > div.themes .browse:active,
+    #preferences form > div.themes .invalid {
+        opacity: 1;
+    }
+    #preferences form > div.themes .meta {
+        margin-top: 1em;
+        color: #d0d0d0;
+    }
+    #preferences form > div.themes .meta a,
+    #preferences form > div.themes .install a {
+        color: white;
+        cursor: pointer;
+    }
+    #preferences form > div.themes .install a {
+        margin-left: .5em;
+    }
+    #preferences form > div.themes .description {
+        color: #888;
+    }
+    #preferences form > div.themes .version {
+        border-radius: 3px;
+        padding: 1px 7px;
+        background: #101010;
+        color: white;
+    }
+    #preferences form > div.themes .install {
+        position: absolute;
+        left: 20px;
+        bottom: 21px;
+    }
+    #preferences form > div.engines > p {
+        position: absolute;
+        left: 20px;
+        bottom: 14px;
     }
     #preferences form.general > div.general,
+    #preferences form.themes > div.themes,
     #preferences form.engines > div.engines {
         display: block;
     }
     #preferences .engines-list {
         overflow: auto;
+}
+
+#cleanmarkup form {
+        overflow: hidden;
     }
-    #preferences input[type="checkbox"]::before {
-        filter: invert(100%);
-        -webkit-filter: invert(100%);
+    #cleanmarkup form ul {
+        float: left;
+        padding-top: 1.5em;
+        width: 33%;
 }
 
 #gamechooser {
         height: 100%;
         bottom: -100%;
         padding: 0;
+        background: rgb(38, 41, 44);
     }
-    #gamechooser.show { bottom: 0; }
+    #gamechooser.show {
+        transform: translateY(-100%);
+    }
     #gamechooser > input {
         position: absolute;
         top: 23px;
@@ -841,8 +981,9 @@ header, #bar .bar {
         padding: 20px;
         text-align: right;
     }
-    #gamechooser button[name="add"] {
+    #gamechooser button.dropdown {
         float: left;
+        margin-right: 5px;
     }
     #gamechooser .games-list {
         position: absolute;
@@ -855,45 +996,45 @@ header, #bar .bar {
         overflow: auto;
         background: rgba(0, 0, 0, .2);
     }
+    #gamechooser .games-list .placeholder {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1px;
+    }
     #gamechooser h2 {
         padding: 20px;
-        font-weight: lighter;
     }
     #gamechooser ol {
         list-style: none;
-        margin: 10px;
     }
     #gamechooser li {
-        float: left;
+        position: absolute;
         height: 253px;
         margin: 10px 10px 20px 10px;
     }
-    #gamechooser li.insertleft {
+    #gamechooser li.insertbefore {
         margin-left: -3px;
         border-left: 3px solid #0050C0;
         padding-left: 10px;
     }
-    #gamechooser li.insertright {
+    #gamechooser li.insertafter {
         margin-right: 0;
         border-right: 3px solid #0050C0;
         padding-right: 7px;
     }
     #gamechooser li.hide { display: none; }
-    #gamechooser li div {
+    #gamechooser li > div {
         margin: 0 auto;
         width: 165px;
     }
-    #gamechooser li div:active { opacity: .5; }
+    #gamechooser li > div:active { opacity: .5; }
     #gamechooser li svg {
         border: 5px solid #ca933a;
         margin-top: 5px;
         padding: 1px;
         background: url('../img/goban/board.png') center #ECB55A;
         background-size: 200%;
-    }
-    #gamechooser li.add svg {
-        border-color: #393939;
-        background: transparent;
     }
     #gamechooser li span {
         display: block;
@@ -910,6 +1051,21 @@ header, #bar .bar {
     }
     #gamechooser li span.white {
         background-image: url('../img/ui/white.svg');
+}
+
+#gamechooser-animation {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform-origin: top left;
+    z-index: 16;
+}
+
+#gamechooser-animation svg {
+    border: 5px solid #ca933a;
+    padding: 1px;
+    background: url('../img/goban/board.png') center #ECB55A;
+    background-size: 200%;
 }
 
 .tabs {
@@ -997,10 +1153,11 @@ header, #bar .bar {
     }
     .engines-list li a img {
         display: block;
-        margin: 1px auto;
-        transform: translateX(-1px);
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         filter: invert(100%);
-        -webkit-filter: invert(100%);
     }
     .engines-list li a.remove:hover {
         background: #E81123;
@@ -1010,4 +1167,25 @@ header, #bar .bar {
     }
     .engines-list li a.browse:active {
         opacity: 1;
+}
+
+#info-overlay {
+        position: absolute;
+        top: 33%;
+        left: 50%;
+        padding: .5em 3em;
+        border-radius: 1.5em;
+        background: rgba(0, 0, 0, .6);
+        color: white;
+        font-size: 1.5em;
+        white-space: nowrap;
+        transform: translate(-50%, -50%);
+        opacity: 0;
+        transition: opacity .5s;
+        pointer-events: none;
+        z-index: 999;
+    }
+    #info-overlay.show {
+        opacity: 1;
+        transition: opacity .1s;
 }

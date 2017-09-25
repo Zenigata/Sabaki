@@ -1,10 +1,12 @@
 {
   "name": "sabaki",
   "productName": "Sabaki",
-  "version": "0.19.1",
+  "version": "0.31.3",
   "description": "An elegant Go/Baduk/Weiqi board and SGF editor for a more civilized age.",
-  "author": "Yichuan Shen",
-  "main": "main.js",
+  "author": "Yichuan Shen <shen.yichuan@gmail.com>",
+  "homepage": "http://sabaki.yichuanshen.de",
+  "license": "MIT",
+  "main": "./src/main.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/yishn/Sabaki"
@@ -12,23 +14,84 @@
   "bugs": {
     "url": "https://github.com/yishn/Sabaki/issues"
   },
-  "license": "MIT",
+  "build": {
+    "appId": "de.yichuanshen.sabaki",
+    "copyright": "Copyright © 2015-2017 Yichuan Shen",
+    "compression": "maximum",
+    "linux": {
+      "category": "Game"
+    },
+    "mac": {
+      "category": "public.app-category.board-games",
+      "target": [
+        "7z"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true
+    },
+    "fileAssociations": [
+      {
+        "ext": "sgf",
+        "name": "SGF",
+        "description": "Smart Game Format"
+      },
+      {
+        "ext": "ngf",
+        "name": "NGF",
+        "description": "wBaduk NGF"
+      },
+      {
+        "ext": "gib",
+        "name": "GIB",
+        "description": "Tygem GIB"
+      }
+    ],
+    "files": [
+      "**/*",
+      "bundle.js",
+      "!bundle.js.map",
+      "!**/{.c9,scss,docs,test,tests,devtools,plugins,examples}${/*}",
+      "!data/shapes.sgf",
+      "!src/components${/*}",
+      "!src/modules${/*}",
+      "!node_modules${/*}",
+      "node_modules/octicons/build/svg",
+      "node_modules/pikaday/css/pikaday.css"
+    ]
+  },
   "dependencies": {
-    "argv-split": "^1.0.0",
-    "iconv-lite": "^0.4.13",
-    "octicons": "^5.0.1",
-    "pikaday": "~1.4.0",
-    "sigma": "^1.0.3"
+    "argv-split": "^2.0.1",
+    "classnames": "^2.2.5",
+    "iconv-lite": "^0.4.19",
+    "jschardet": "^1.5.1",
+    "natsort": "^1.0.6",
+    "octicons": "^6.0.1",
+    "pikaday": "^1.6.1",
+    "preact": "^8.2.5",
+    "recursive-copy": "^2.0.6",
+    "rimraf": "^2.6.2",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "electron-packager": "^8.0.0",
-    "mocha": "^3.0.2",
-    "tmp": "~0.0.29"
+    "electron": "1.7.8",
+    "electron-builder": "^19.28.4",
+    "mocha": "^3.5.3",
+    "raw-loader": "^0.5.1",
+    "tmp": "0.0.33",
+    "webpack": "^3.6.0"
   },
   "scripts": {
     "test": "mocha",
-    "build:win": "electron-packager ./ sabaki --platform=win32 --arch=all --app-version=0.19.1 --build-version=0.19.1 --version=1.4.10 --out=./bin --overwrite --icon=./data/icon.ico --app-copyright=\"Copyright (C) 2015/2016 Yichuan Shen\" --win32metadata.CompanyName=\"Yichuan Shen\" --win32metadata.FileDescription=\"Sabaki\" --win32metadata.OriginalFilename=\"sabaki.exe\" --win32metadata.ProductName=\"Sabaki\" --win32metadata.InternalName=\"sabaki.exe\" --ignore=\"(build.js|docs|tests?|examples|.c9|scss|^/node_modules/(moment|(octicons|sigma)/(plugins|lib|src|build/font)))($|/)\" --asar",
-    "build:linux": "electron-packager ./ sabaki --platform=linux --arch=all --app-version=0.19.1 --build-version=0.19.1 --version=1.4.10 --out=./bin --overwrite --app-copyright=\"Copyright (C) 2015/2016 Yichuan Shen\" --ignore=\"(build.js|docs|tests?|examples|.c9|scss|^/node_modules/(moment|(octicons|sigma)/(plugins|lib|src|build/font)))($|/)\" --asar",
-    "build:osx": "electron-packager ./ Sabaki --platform=darwin --arch=all --app-version=0.19.1 --build-version=0.19.1 --version=1.4.10 --out=./bin --overwrite --app-copyright=\"Copyright (C) 2015/2016 Yichuan Shen\" --icon=./data/icon.icns --app-category-type=public.app-category.games --extend-info=./data/extra-info.plist --ignore=\"(build.js|docs|tests?|examples|.c9|scss|^/node_modules/(moment|(octicons|sigma)/(plugins|lib|src|build/font)))($|/)\" --asar"
+    "start": "electron ./",
+    "bundle": "webpack --progress",
+    "watch": "webpack --progress --watch",
+    "build": "npm run bundle && build --dir",
+    "dist:macos": "npm run bundle && build -m --x64",
+    "dist:linux": "npm run bundle && build -l --ia32 --x64",
+    "dist:win32": "npm run bundle && build -w --ia32",
+    "dist:win64": "npm run bundle && build -w --x64"
   }
 }

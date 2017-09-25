@@ -79,7 +79,7 @@
 
 .goban .row li {
         position: relative;
-        background: url('../img/goban/inner.png') center;
+        background: url('../img/goban/inner.svg') center;
     }
     .goban .row li.hoshi::after {
         content: '';
@@ -95,37 +95,51 @@
         background: #5E2E0C;
     }
     .goban .row:nth-child(3) li {
-        background-image: url('../img/goban/side-n.png');
+        background-image: url('../img/goban/side-n.svg');
     }
     .goban .row:nth-last-child(3) li {
-        background-image: url('../img/goban/side-s.png');
+        background-image: url('../img/goban/side-s.svg');
     }
     .goban .row li:first-child {
-        background-image: url('../img/goban/side-w.png');
+        background-image: url('../img/goban/side-w.svg');
     }
     .goban .row li:last-child {
-        background-image: url('../img/goban/side-e.png');
+        background-image: url('../img/goban/side-e.svg');
     }
     .goban .row:nth-child(3) li:first-child {
-        background-image: url('../img/goban/corner-nw.png');
+        background-image: url('../img/goban/corner-nw.svg');
     }
     .goban .row:nth-child(3) li:last-child {
-        background-image: url('../img/goban/corner-ne.png');
+        background-image: url('../img/goban/corner-ne.svg');
     }
     .goban .row:nth-last-child(3) li:first-child {
-        background-image: url('../img/goban/corner-sw.png');
+        background-image: url('../img/goban/corner-sw.svg');
     }
     .goban .row:nth-last-child(3) li:last-child {
-        background-image: url('../img/goban/corner-se.png');
+        background-image: url('../img/goban/corner-se.svg');
+}
+
+/**
+ * Highlight
+ */
+
+.goban .row li .highlight {
+    position: absolute;
+    left: -2px;
+    right: -2px;
+    top: -2px;
+    bottom: -2px;
+    border: 2px solid #0082F0;
+    border-radius: 5px;
+    background: rgba(0, 130, 240, .2);
+    z-index: 4;
 }
 
 /**
  * Dimming & Paint
  */
 
-.scoring .goban .row li.dead img,
-.estimator .goban .row li.dead img,
-body:not(.scoring):not(.estimator) .goban .row li.dimmed img {
+.goban .row li.dimmed img {
     opacity: .5;
 }
 
@@ -137,15 +151,11 @@ body:not(.scoring):not(.estimator) .goban .row li.dimmed img {
         opacity: .3;
         z-index: 3;
     }
-    .scoring .goban .row li.area_1 div.paint,
-    .estimator .goban .row li.area_1 div.paint,
-    body:not(.scoring):not(.estimator) .goban .row li.paint_1 div.paint {
+    .goban .row li.paint_1 div.paint {
         display: block;
         background-color: black;
     }
-    .scoring .goban .row li.area_-1 div.paint,
-    .estimator .goban .row li.area_-1 div.paint,
-    body:not(.scoring):not(.estimator) .goban .row li.paint_-1 div.paint {
+    .goban .row li.paint_-1 div.paint {
         display: block;
         background-color: white;
 }
@@ -167,6 +177,7 @@ body:not(.scoring):not(.estimator) .goban .row li.dimmed img {
         margin-top: calc(-.25em - 1px);
         border-radius: 100%;
         z-index: 2;
+        pointer-events: none;
     }
 
     .goban.siblings .row li.sign_0.siblingghost_1 .stone::after { background: black; }
@@ -182,6 +193,15 @@ body:not(.scoring):not(.estimator) .goban .row li.dimmed img {
     .goban .row li.sign_-1.point .stone::after { background: black; }
     .goban.variations .row li.sign_0.ghost_-1 .stone::after,
     .goban .row li.sign_1.point .stone::after { background: white; }
+
+    .goban.movecolorization .row li.sign_0.ghost_1.goodmove .stone::after { background: #006300;  }
+    .goban.movecolorization .row li.sign_0.ghost_-1.goodmove .stone::after { background: #47D661;  }
+    .goban.movecolorization .row li.sign_0.ghost_1.interestingmove .stone::after { background: #003037; }
+    .goban.movecolorization .row li.sign_0.ghost_-1.interestingmove .stone::after { background: #47B3BA; }
+    .goban.movecolorization .row li.sign_0.ghost_1.doubtfulmove .stone::after { background: #EBEB00; }
+    .goban.movecolorization .row li.sign_0.ghost_-1.doubtfulmove .stone::after { background: #FFFF1F; }
+    .goban.movecolorization .row li.sign_0.ghost_1.badmove .stone::after { background: #930000; }
+    .goban.movecolorization .row li.sign_0.ghost_-1.badmove .stone::after { background: #F76047; }
 
     body:not(.guess) .goban.siblings .row li.sign_0.siblingghost_1 .stone::after,
     body:not(.guess) .goban.siblings .row li.sign_0.siblingghost_-1 .stone::after,
@@ -204,7 +224,6 @@ body:not(.scoring):not(.estimator) .goban .row li.dimmed img {
         width: 100%;
         height: 100%;
         text-align: center;
-        font-weight: bold;
         z-index: 2;
     }
     .goban .row li .stone span::before,
@@ -311,7 +330,6 @@ body:not(.scoring):not(.estimator) .goban .row li.dimmed img {
         height: 1.1em;
         overflow: hidden;
         box-shadow: none;
-        font-weight: normal;
         font-size: .6em;
         line-height: .9;
         text-overflow: ellipsis;
@@ -330,6 +348,8 @@ body:not(.scoring):not(.estimator) .goban .row li.dimmed img {
 .goban .line, .goban .arrow,
 .goban .arrow::before, .goban .arrow::after {
     position: absolute;
+    top: 7px;
+    left: 7px;
     border: none;
     height: .11em;
     background: #5E2E0C;
@@ -340,6 +360,7 @@ body:not(.scoring):not(.estimator) .goban .row li.dimmed img {
 .goban .arrow::before, .goban .arrow::after {
         content: '';
         width: .36em;
+        left: auto;
         right: 0;
         top: -.07em;
         transform: rotate(30deg);
